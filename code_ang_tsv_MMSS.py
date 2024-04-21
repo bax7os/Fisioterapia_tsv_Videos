@@ -3,14 +3,27 @@
 import csv
 import numpy as np
 import math
-input_file = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv/projeto-fisioterapia-3D/output/MMSS/output_file_points_MMSS.tsv'
-output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv/projeto-fisioterapia-3D/angulos/MMSS/ang_MMSS_tsv.tsv'
+import glob
+
+
+
+diretorio = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/input/MMSS'
+# Busca por todos os arquivos TSV no diretório especificado
+arquivos_tsv = glob.glob(f'{diretorio}/*.tsv')
+# Verifica se há pelo menos um arquivo TSV na pasta
+if arquivos_tsv:
+    # Assume que estamos usando o primeiro arquivo encontrado
+    input_file = arquivos_tsv[0]
+
+
+output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/MMSS/ang_MMSS_tsv.tsv'
 
 def calculate_angle(point1, point2, point3):
     # Calculate vectors from point2 to point1 and point2 to point3
     vector1 = [point1[0] - point2[0], point1[1] - point2[1], point1[2] - point2[2]]
     vector2 = [point3[0] - point2[0], point3[1] - point2[1], point3[2] - point2[2]]
-
+    print(vector1)
+    print(vector2)
     # Calculate the dot product of the two vectors
     dot_product = sum(v1 * v2 for v1, v2 in zip(vector1, vector2))
 
@@ -40,14 +53,16 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
     frame = 0
     count = 0
     for row in reader:
-        a,b,c = map(float, row[3:6]) 
-        print(a,b,c)
+
 
         if count % 3 == 0:
-            # abertura no ombro Ângulo entre retas formadas por AC_D/AC_E e CM_D/CM_E
-            x1, y1, z1 = map(float, row[50:53])  # cotovelo direito gerado por new_points
-            x2, y2, z2 = map(float, row[32:35])  # OMBRO direito (AC_D)
-            x3, y3, z3 = map(float, row[14:17])  # ombro esquerdo (AC_E)
+
+
+            # Abdução ombro direito SHOULDER1 SHOULDER2 ELBOW1
+
+            x1, y1, z1 = map(float, row[9:12])  # shoulder2
+            x2, y2, z2 = map(float, row[6:9])  # shoulder1
+            x3, y3, z3 = map(float, row[12:15])  # elbow1
 
             ponto1 = [x1, y1, z1]
             ponto2= [x2, y2, z2]
@@ -60,10 +75,11 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
             #/////////////////////////////////////////////////////
 
-            # Abducao ombro esquerdo C_E AC_E AC_D
-            x12, y12, z12 = map(float, row[56:59])  # cotovelo esquerdo gerado por new_points
-            x22, y22, z22 = map(float, row[14:17])  # OMBRO direito (AC_E)
-            x32, y32, z32 = map(float, row[32:35])  # ombro esquerdo (AC_D)
+            # Abducao ombro esquerdo SHOULDER1 SHOULDER2 ELBOW2 
+
+            x12, y12, z12 = map(float, row[6:9])  # SHOULDER1
+            x22, y22, z22 = map(float, row[9:12])  # SHOULDER2
+            x32, y32, z32 = map(float, row[15:18])  # ELBOW2
 
             ponto1 = [x12, y12, z12]
             ponto2= [x22, y22, z22]
@@ -73,11 +89,11 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
             
             #/////////////////////////////////////////////////////
 
-            # Flexao cotovelo direito PER/PEU EM/EL e AC_E
+            # Flexao cotovelo direito SHOULDER1 ELBOW1 WRIST1 
 
-            x13, y13, z13 = map(float, row[53:56])  # Pulso DIREITO gerado por new points   
-            x23, y23, z23 = map(float, row[50:53])  # COTOVELO DIREITO gerado por new points 
-            x33, y33, z33 = map(float, row[32:35])  # OMBRO direito (AC_D)
+            x13, y13, z13 = map(float, row[6:9])  # SHOULDER1
+            x23, y23, z23 = map(float, row[12:15])  # ELBOW1
+            x33, y33, z33 = map(float, row[0:3])  # WRIST1
 
             ponto1 = [x13, y13, z13]
             ponto2= [x23, y23, z23]
@@ -88,26 +104,25 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
             #///////////////////////////////////////////////////////////
             
-            # Flexao cotovelo esquerdo PER/PEU EM/EL e AC_E
-
-            x14, y14, z14 = map(float, row[59:62])  # Pulso ESQUERDO gerado por new points   
-            x24, y24, z24 = map(float, row[56:59])  # COTOVELO ESQUERDO gerado por new points 
-            x34, y34, z34 = map(float, row[14:17])  # OMBRO esquerdo (AC_E)
+            # Flexao cotovelo esquerdo SHOULDER2 ELBOW2 WRIST2
+            x14, y14, z14 = map(float, row[9:12])  # SHOULDER2
+            x24, y24, z24 = map(float, row[15:18])  # ELBOW2
+            x34, y34, z34 = map(float, row[3:6])  # WRIST2
 
             ponto1 = [x14, y14, z14]
             ponto2= [x24, y24, z24]
             ponto3 = [x34, y34, z34]
 
-            ang_flex_cotovelo_esquerdo = calculate_angle(ponto1, ponto2, ponto3)
+            ang_flex_cotovelo_esquerdo =  calculate_angle(ponto1, ponto2, ponto3)
 
 
             #///////////////////////////////////////////////////////////
 
-            # Flexao Ombro direito 
+            # Flexao Ombro direito HIP1 SHOULDER1 ELBOW1
             
-            x15, y15, z15 = map(float, row[56:59])  # ponto medio EM_D EL_D
-            x25, y25, z25 = map(float, row[32:35])  # AC_D
-            x35, y35, z35 = map(float, row[62:65])  # PELVE_D
+            x15, y15, z15 = map(float, row[18:21])  # HIP1
+            x25, y25, z25 = map(float, row[6:9])  # SHOULDER1
+            x35, y35, z35 = map(float, row[12:15])  # ELBOW1
 
             ponto1 = [x15, y15, z15]
             ponto2= [x25, y25, z25]
@@ -117,11 +132,11 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
             #//////////////////////////////////////////////////////////
 
-            # Flexao Ombro esquerdo
+            # Flexao Ombro esquerdo HIP2 SHOULDER2 ELBOW2
             
-            x16, y16, z16 = map(float, row[56:59])  # ponto medio EM_E EL_E
-            x26, y26, z26 = map(float, row[14:17])  # AC_E
-            x36, y36, z36 = map(float, row[65:68])  # PELVE_E
+            x16, y16, z16 = map(float, row[21:24])  # HIP2
+            x26, y26, z26 = map(float, row[18:21])  # SHOULDER2
+            x36, y36, z36 = map(float, row[15:18])  # ELBOW2
             ponto14 = [x16, y16, z16]
             ponto24= [x26, y26, z26]
             ponto34 = [x36, y36, z36]

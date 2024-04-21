@@ -5,7 +5,7 @@ import numpy as np
 import math
 
 input_file = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv/projeto-fisioterapia-3D/output/Coluna/output_file_points_Coluna.tsv'
-output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv/projeto-fisioterapia-3D/angulos/Coluna/ang_Coluna_tsv.tsv'
+output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/ang_Coluna_tsv.tsv'
 
 def calculate_angle(point1, point2, point3):
     # Calculate vectors from point2 to point1 and point2 to point3
@@ -82,10 +82,10 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
         if count % 3 == 0:
             
-            # flexao cabeca
-            x1_, y1_, z1_ = map(float, row[20:23])  # GA 
-            x2_, y2_, z2_ = map(float, row[47:50])  # ponto medio AC gerado por new_points_coluna
-            x3_, y3_, z3_ = map(float, row[50:53])  # ponto medio TMF gerado por new_points_coluna
+            # flexao cabeca meio cabeça meio ombro meio cintura
+            x1_, y1_, z1_ = map(float, row[36:39])  # meio cabeça
+            x2_, y2_, z2_ = map(float, row[39:42])  # meio ombro
+            x3_, y3_, z3_ = map(float, row[42:45])  # meio cintura
 
             ponto1 = [x1_, y1_, z1_]
             ponto2= [x2_, y2_, z2_]
@@ -95,10 +95,10 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
             #////////////////////////////////////////////////////////////////////////////////////////
 
-            # flexao tronco
-            x11, y11, z11 = map(float, row[47:50])  # ponto medio AC gerado por new_points_coluna
-            x22, y22, z22 = map(float, row[53:56])  # ponto medio EIAS gerado por new_points_coluna
-            x33, y33, z33 = map(float, row[50:53])  # ponto medio TMF gerado por new_points_coluna
+            # flexao tronco meio ombro meio cintura meio knee
+            x11, y11, z11 = map(float, row[39:42])  # meio ombro
+            x22, y22, z22 = map(float, row[42:45])  # meio cintura
+            x33, y33, z33 = map(float, row[45:48])  # meio knee
 
             ponto11 = [x11, y11, z11]
             ponto22= [x22, y22, z22]
@@ -108,11 +108,11 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
             
             #///////////////////////////////////////////////////////////////////////////////////////
 
-             # rotação tronco
-            X, Y, Z = map(float, row[35:38])  # AC_D
-            X1, Y1, Z1 = map(float, row[38:41])  # AC_E
-            X2, Y2, Z2 = map(float, row[41:44]) #EIAS_D
-            X3, Y3, Z3 = map(float, row[8:11]) #EIAS_E
+             # rotação tronco shoulder1 shoulder2 hip1 hip2
+            X, Y, Z = map(float, row[6:9])  # shoulder1
+            X1, Y1, Z1 = map(float, row[9:12])  # shoulder2
+            X2, Y2, Z2 = map(float, row[18:21]) # hip1
+            X3, Y3, Z3 = map(float, row[21:24]) # hip2
 
 
         
