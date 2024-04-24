@@ -97,7 +97,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto2= [x2, y2, z2]
         ponto3 = [x3, y3, z3]
 
-        ang_abd_ombro_direito =  180 - calculate_angle_2d(ponto1, ponto2, ponto3) #calcula abertura no ponto do meio
+        ang_abd_ombro_direito = calculate_angle(ponto1, ponto2, ponto3) #calcula abertura no ponto do meio
         
 
 
@@ -116,7 +116,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto2_= [x22, y22, z22]
         ponto3_ = [x32, y32, z32]
 
-        ang_abd_ombro_esquerdo = calculate_angle_2d(ponto1_, ponto2_, ponto3_) #calcula abertura no ponto do meio
+        ang_abd_ombro_esquerdo = calculate_angle(ponto1_, ponto2_, ponto3_) #calcula abertura no ponto do meio
         
         #/////////////////////////////////////////////////////
 
@@ -133,7 +133,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto39 = [x33, y33, z33]
      
 
-        ang_flex_cotovelo_direito =180- calculate_angle_2d(ponto19, ponto29, ponto39)
+        ang_flex_cotovelo_direito =calculate_angle(ponto19, ponto29, ponto39)
 
 
         #///////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
 
 
 
-        ang_flex_cotovelo_esquerdo =calculate_angle_2d(ponto16, ponto26, ponto36)
+        ang_flex_cotovelo_esquerdo =calculate_angle(ponto16, ponto26, ponto36)
 
      
         #///////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto53 = [x35, y35, z35]
 
 
-        ang_flex_ombro_direito = calculate_angle_2d(ponto51, ponto52, ponto53)
+        ang_flex_ombro_direito = calculate_angle(ponto51, ponto52, ponto53)
         #//////////////////////////////////////////////////////////
 
         # Flexao Ombro esquerdo HIP2 SHOULDER2 ELBOW2
@@ -185,13 +185,12 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto24= [x26, y26, 0]
         ponto34 = [x36, y36,0]
 
-        ang_flex_ombro_esquerdo = calculate_angle_2d(ponto14, ponto24, ponto34)
+        ang_flex_ombro_esquerdo = calculate_angle(ponto14, ponto24, ponto34)
 
         new_row = [frame,"abd ombro direito:", ang_abd_ombro_direito,  "abd ombro esquerdo:", ang_abd_ombro_esquerdo,"flex cotovelo direito:", ang_flex_cotovelo_direito, "flex cotovelo esquerdo:", ang_flex_cotovelo_esquerdo,
                     "flex ombro direito:", ang_flex_ombro_direito, "flex ombro esquerdo:", ang_flex_ombro_esquerdo]
         frame += 1
         writer.writerow(new_row)
     count += 1
-
 
 
