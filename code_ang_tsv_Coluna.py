@@ -4,10 +4,10 @@ import csv
 import numpy as np
 import math
 
-input_file = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv/projeto-fisioterapia-3D/output/Coluna/output_file_points_Coluna.tsv'
+input_file = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/output/Coluna/output_file_points_Coluna.tsv'
 output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/ang_Coluna_tsv.tsv'
 
-def calculate_angle(point1, point2, point3):
+def calculate_angle2(point1, point2, point3):
     # Calculate vectors from point2 to point1 and point2 to point3
     vector1 = [point1[0] - point2[0], point1[1] - point2[1], point1[2] - point2[2]]
     vector2 = [point3[0] - point2[0], point3[1] - point2[1], point3[2] - point2[2]]
@@ -27,6 +27,30 @@ def calculate_angle(point1, point2, point3):
 
     return angle_degrees
 
+def calculate_angle(point1, point2, point3):
+    # Calculate vectors from point2 to point1 and point2 to point3
+    vector1 = [point1[0] - point2[0], point1[1] - point2[1], point1[2] - point2[2]]
+    vector2 = [point3[0] - point2[0], point3[1] - point2[1], point3[2] - point2[2]]
+
+    # Calculate the dot product of the two vectors
+    dot_product = sum(v1 * v2 for v1, v2 in zip(vector1, vector2))
+
+    # Calculate the magnitudes of the two vectors
+    magnitude1 = math.sqrt(sum(v1 ** 2 for v1 in vector1))
+    magnitude2 = math.sqrt(sum(v2 ** 2 for v2 in vector2))
+
+    # Calculate the angle in radians
+    angle_radians = math.acos(dot_product / (magnitude1 * magnitude2))
+
+    # Convert radians to degrees
+    angle_degrees = math.degrees(angle_radians)
+
+    # Check if the angle is greater than 180 degrees
+    if angle_degrees > 180:
+        # If so, adjust it to be its complement
+        angle_degrees = 360 - angle_degrees
+
+    return angle_degrees
 
 
 count = 0
@@ -56,7 +80,6 @@ def calcula_inclinacao(x1, y1, z1, x2, y2, z2):
                 
 '''função recebe as coordenadas de 4 pontos, 2 de uma reta (final e inicial) e 2 de outra'''
 def angulo_de_flexao(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4):
-                
     inclinacao_reta1 = calcula_inclinacao(x1, y1, z1, x2, y2, z2)
     inclinacao_reta2 = calcula_inclinacao(x3, y3, z3, x4, y4, z4)
                 
@@ -67,7 +90,16 @@ def angulo_de_flexao(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4):
              
     angulo = math.acos(produto_escalar)
 
-    return math.degrees(angulo)
+    # Convertendo para graus
+    angulo_graus = math.degrees(angulo)
+    
+    # Verificando se o ângulo é maior que 180 graus
+    if angulo_graus > 180:
+        # Se for, ajusta para seu complemento em relação a 360 graus
+        angulo_graus = 360 - angulo_graus
+
+    return angulo_graus
+
 #
 # explicar csv_out
 #
@@ -80,7 +112,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
     count = 0
     for row in reader:
 
-        if count % 3 == 0:
+        if count % 1 == 0:
             
             # flexao cabeca meio cabeça meio ombro meio cintura
             x1_, y1_, z1_ = map(float, row[36:39])  # meio cabeça
@@ -99,7 +131,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
             x11, y11, z11 = map(float, row[39:42])  # meio ombro
             x22, y22, z22 = map(float, row[42:45])  # meio cintura
             x33, y33, z33 = map(float, row[45:48])  # meio knee
-
+       
             ponto11 = [x11, y11, z11]
             ponto22= [x22, y22, z22]
             ponto33 = [x33, y33, z33]

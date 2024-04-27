@@ -19,9 +19,14 @@ if arquivos_tsv:
 output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/MMSS/ang_MMSS_tsv.tsv'
 
 def calculate_angle(point1, point2, point3):
+    
+
     # Calculate vectors from point2 to point1 and point2 to point3
     vector1 = [point1[0] - point2[0], point1[1] - point2[1], point1[2] - point2[2]]
+
+
     vector2 = [point3[0] - point2[0], point3[1] - point2[1], point3[2] - point2[2]]
+
     #print(vector1)
     #print(vector2)
     # Calculate the dot product of the two vectors
@@ -29,34 +34,52 @@ def calculate_angle(point1, point2, point3):
 
     # Calculate the magnitudes of the two vectors
     magnitude1 = math.sqrt(sum(v1 ** 2 for v1 in vector1))
+
     magnitude2 = math.sqrt(sum(v2 ** 2 for v2 in vector2))
+
 
     # Calculate the angle in radians
     angle_radians = math.acos(dot_product / (magnitude1 * magnitude2))
+
+
+
 
     # Convert radians to degrees
     angle_degrees = math.degrees(angle_radians)
 
+
     return angle_degrees
 
+def calculate_midpoint(x1, y1, z1, x2, y2, z2):
+    midpoint_x = (x1 + x2) / 2
+    midpoint_y = (y1 + y2) / 2
+    midpoint_z = (z1 + z2) / 2
+    return midpoint_x, midpoint_y, midpoint_z
 
 
-
-def calculate_angle_2d(point1, point2, point3):
+def calculate_angle9(point1, point2, point3):
     # Calculate vectors from point2 to point1 and point2 to point3 (disregarding Z coordinates)
-    vector1 = [point1[0] - point2[0], point2[1] - point1[1]]
-    vector2 = [point3[0] - point2[0], point2[1] - point1[1]]
+    vector1 = [point1[0] - point2[0], point1[1] - point2[1]]
+    vector2 = [point3[0] - point2[0], point3[1] - point2[1]]
+    print("===========================")
+    print(vector1)
+    print(vector2)
 
     # Calculate the dot product of the two vectors
     dot_product = sum(v1 * v2 for v1, v2 in zip(vector1, vector2))
-
+    print(dot_product)
+    print("===========================")
     # Calculate the magnitudes of the two vectors
     magnitude1 = math.sqrt(sum(v1 ** 2 for v1 in vector1))
     magnitude2 = math.sqrt(sum(v2 ** 2 for v2 in vector2))
-
+    print(magnitude1)
+    print(magnitude2)
+    print("\n")
     # Calculate the angle in radians
-    angle_radians = math.acos(dot_product / (magnitude1 * magnitude2))
-
+    angle= round(dot_product / (magnitude1 * magnitude2), 0)
+    angle_radians = math.acos(angle)
+    print(angle_radians)
+    print("\n")
     # Convert radians to degrees
     angle_degrees = math.degrees(angle_radians)
 
@@ -64,6 +87,8 @@ def calculate_angle_2d(point1, point2, point3):
 
 count = 0
 
+ 
+    # This code is contributed by ukasp.
 
 #
 # explicar csv_out
@@ -73,7 +98,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
     reader = csv.reader(tsv_in, delimiter='\t')
     writer = csv.writer(tsv_out, delimiter='\t')
     frame = 0
-    count = 0
+
     for row in reader:
 
 
@@ -96,7 +121,7 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto1 = [x1, y1, z1]
         ponto2= [x2, y2, z2]
         ponto3 = [x3, y3, z3]
-
+        
         ang_abd_ombro_direito = calculate_angle(ponto1, ponto2, ponto3) #calcula abertura no ponto do meio
         
 
@@ -133,27 +158,31 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         ponto39 = [x33, y33, z33]
      
 
-        ang_flex_cotovelo_direito =calculate_angle(ponto19, ponto29, ponto39)
+        ang_flex_cotovelo_direito = calculate_angle9(ponto19, ponto29, ponto39)
 
 
         #///////////////////////////////////////////////////////////
         
         # Flexao cotovelo esquerdo SHOULDER2 ELBOW2 WRIST2
         x14, y14, z14 = map(float, row[9:12])  # SHOULDER2
-        x24, y24, z24 = map(float, row[15:18])  # ELBOW2
+        #x24, y24, z24 = map(float, row[15:18])  # ELBOW2
         x34, y34, z34 = map(float, row[3:6])  # WRIST2
-        x14, y14, z14 = round(x14, 5), round(y14, 5), round(z14, 5)
-        x24, y24, z24 = round(x24, 5), round(y24, 5), round(z24, 5)
-        x34, y34, z34 = round(x34, 5), round(y34, 5), round(z34, 5)
+
+        #x14, y14, z14 = round(x14, 5), round(y14, 5), round(z14, 5)
+        #x24, y24, z24 = round(x24, 5), round(y24, 5), round(z24, 5)
+        #x34, y34, z34 = round(x34, 5), round(y34, 5), round(z34, 5)
+
+        ponto26 =  calculate_midpoint(x14, y14,z14,x34, y34, z34)
+ 
         ponto16 = [x14, y14, z14]
-        ponto26= [x24, y24, z24]
         ponto36 = [x34, y34, z34]
-  
-
-
-
-        ang_flex_cotovelo_esquerdo =calculate_angle(ponto16, ponto26, ponto36)
-
+        print("Aqui")
+        print(ponto26)
+        print(ponto16)
+        print(ponto36)
+        
+        ang_flex_cotovelo_esquerdo = calculate_angle9(ponto16, ponto26, ponto36)
+        
      
         #///////////////////////////////////////////////////////////
 
@@ -181,16 +210,16 @@ with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv
         x16, y16, z16 = round(x16, 5), round(y16, 5), round(z16, 5)
         x26, y26, z26 = round(x26, 5), round(y26, 5), round(z26, 5)
         x36, y36, z36 = round(x36, 5), round(y36, 5), round(z36, 5)
-        ponto14 = [x16, y16, 0]
-        ponto24= [x26, y26, 0]
-        ponto34 = [x36, y36,0]
+        ponto14 = [x16, y16, z16]
+        ponto24= [x26, y26, z26]
+        ponto34 = [x36, y36,z36]
 
         ang_flex_ombro_esquerdo = calculate_angle(ponto14, ponto24, ponto34)
 
-        new_row = [frame,"abd ombro direito:", ang_abd_ombro_direito,  "abd ombro esquerdo:", ang_abd_ombro_esquerdo,"flex cotovelo direito:", ang_flex_cotovelo_direito, "flex cotovelo esquerdo:", ang_flex_cotovelo_esquerdo,
+        new_row = ["abd ombro direito:", ang_abd_ombro_direito,  "abd ombro esquerdo:", ang_abd_ombro_esquerdo,"flex cotovelo direito:", ang_flex_cotovelo_direito, "flex cotovelo esquerdo:", ang_flex_cotovelo_esquerdo,
                     "flex ombro direito:", ang_flex_ombro_direito, "flex ombro esquerdo:", ang_flex_ombro_esquerdo]
-        frame += 1
+        
         writer.writerow(new_row)
-    count += 1
+
 
 
