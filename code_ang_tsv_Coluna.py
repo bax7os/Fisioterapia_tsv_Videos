@@ -3,9 +3,10 @@
 import csv
 import numpy as np
 import math
+import glob
+import os
 
-input_file = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/output/Coluna/output_file_points_Coluna.tsv'
-output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/ang_Coluna_tsv.tsv'
+#output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/ang_Coluna_tsv.tsv'
 
 def calculate_angle2(point1, point2, point3):
     # Calculate vectors from point2 to point1 and point2 to point3
@@ -104,15 +105,21 @@ def angulo_de_flexao(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4):
 # explicar csv_out
 #
 # Read the input TSV file and create an output TSV file
+diretorio = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/output/Coluna'
+arquivos_tsv = glob.glob(f'{diretorio}/*.tsv')
 
-with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv_out:
-    reader = csv.reader(tsv_in, delimiter='\t')
-    writer = csv.writer(tsv_out, delimiter='\t')
+    
+for input_file in arquivos_tsv:
+    nome_arquivo = os.path.basename(input_file)
+    output_angle = os.path.join('D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna', f'ang_{nome_arquivo}')
 
-    count = 0
-    for row in reader:
 
-        if count % 1 == 0:
+    with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv_out:
+        reader = csv.reader(tsv_in, delimiter='\t')
+        writer = csv.writer(tsv_out, delimiter='\t')
+
+        for row in reader:
+
             
             # flexao cabeca meio cabeça meio ombro meio cintura
             x1_, y1_, z1_ = map(float, row[36:39])  # meio cabeça
