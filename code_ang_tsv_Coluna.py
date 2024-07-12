@@ -1,10 +1,10 @@
 #gera angulos a partir do tsv em output_angle.tsv
 
 import csv
-import numpy as np
+import numpy 
 import math
 import glob
-import os
+
 
 #output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/ang_Coluna_tsv.tsv'
 
@@ -103,81 +103,80 @@ def angulo_de_flexao(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4):
 
 #
 # explicar csv_out
-#
-# Read the input TSV file and create an output TSV file
+count = 0
 diretorio = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/output/Coluna'
 arquivos_tsv = glob.glob(f'{diretorio}/*.tsv')
 
+# Abra o arquivo de saída uma vez fora do loop
+output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna/output_angulos_videos_RT.tsv'
+with open(output_angle, 'a', newline='') as tsv_out:
+    writer = csv.writer(tsv_out, delimiter='\t')
     
-for input_file in arquivos_tsv:
-    nome_arquivo = os.path.basename(input_file)
-    output_angle = os.path.join('D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/Coluna', f'ang_{nome_arquivo}')
-
-
-    with open(input_file, 'r') as tsv_in, open(output_angle, 'w', newline='') as tsv_out:
-        reader = csv.reader(tsv_in, delimiter='\t')
-        writer = csv.writer(tsv_out, delimiter='\t')
-
-        for row in reader:
+    for input_file in arquivos_tsv:
+        with open(input_file, 'r') as tsv_in:
+            reader = csv.reader(tsv_in, delimiter='\t')
+            frame = 0
+            count = 0
+            for row in reader:
 
             
-            # flexao cabeca meio cabeça meio ombro meio cintura
-            x1_, y1_, z1_ = map(float, row[36:39])  # meio cabeça
-            x2_, y2_, z2_ = map(float, row[39:42])  # meio ombro
-            x3_, y3_, z3_ = map(float, row[42:45])  # meio cintura
+                # flexao cabeca meio cabeça meio ombro meio cintura
+                x1_, y1_, z1_ = map(float, row[36:39])  # meio cabeça
+                x2_, y2_, z2_ = map(float, row[39:42])  # meio ombro
+                x3_, y3_, z3_ = map(float, row[42:45])  # meio cintura
 
-            ponto1 = [x1_, y1_, z1_]
-            ponto2= [x2_, y2_, z2_]
-            ponto3 = [x3_, y3_, z3_]
+                ponto1 = [x1_, y1_, z1_]
+                ponto2= [x2_, y2_, z2_]
+                ponto3 = [x3_, y3_, z3_]
 
-            flexao_cabeca = calculate_angle(ponto1, ponto2, ponto3)
+                flexao_cabeca = calculate_angle(ponto1, ponto2, ponto3)
 
-            #////////////////////////////////////////////////////////////////////////////////////////
+                #////////////////////////////////////////////////////////////////////////////////////////
 
-            # flexao tronco meio ombro meio cintura meio knee
-            x11, y11, z11 = map(float, row[39:42])  # meio ombro
-            x22, y22, z22 = map(float, row[42:45])  # meio cintura
-            x33, y33, z33 = map(float, row[45:48])  # meio knee
-       
-            ponto11 = [x11, y11, z11]
-            ponto22= [x22, y22, z22]
-            ponto33 = [x33, y33, z33]
-
-            flexao_tronco = calculate_angle(ponto11, ponto22, ponto33)
-            
-            #///////////////////////////////////////////////////////////////////////////////////////
-
-             # rotação tronco shoulder1 shoulder2 hip1 hip2
-            X, Y, Z = map(float, row[6:9])  # shoulder1
-            X1, Y1, Z1 = map(float, row[9:12])  # shoulder2
-            X2, Y2, Z2 = map(float, row[18:21]) # hip1
-            X3, Y3, Z3 = map(float, row[21:24]) # hip2
-
-
+                # flexao tronco meio ombro meio cintura meio knee
+                x11, y11, z11 = map(float, row[39:42])  # meio ombro
+                x22, y22, z22 = map(float, row[42:45])  # meio cintura
+                x33, y33, z33 = map(float, row[45:48])  # meio knee
         
+                ponto11 = [x11, y11, z11]
+                ponto22= [x22, y22, z22]
+                ponto33 = [x33, y33, z33]
 
-               
+                flexao_tronco = calculate_angle(ponto11, ponto22, ponto33)
+                
+                #///////////////////////////////////////////////////////////////////////////////////////
 
-            ponto111 = [X, Y, Z ]
-            ponto222= [X1, Y1, Z1]
-            ponto333 = [X2, Y2, Z2]
-            ponto4 = [X3, Y3, Z3]
-  
-            x_inicial, y_inicial, z_inicial = ponto222
-            x_final, y_final, z_final = ponto111
-            x1_inicial, y1_inicial, z1_inicial = ponto4
-            x1_final, y1_final, z1_final = ponto333
+                # rotação tronco shoulder1 shoulder2 hip1 hip2
+                X, Y, Z = map(float, row[6:9])  # shoulder1
+                X1, Y1, Z1 = map(float, row[9:12])  # shoulder2
+                X2, Y2, Z2 = map(float, row[18:21]) # hip1
+                X3, Y3, Z3 = map(float, row[21:24]) # hip2
 
 
-            rotacao_tronco = angulo_de_flexao(x_inicial, y_inicial, z_inicial, x_final, y_final, z_final, x1_inicial, y1_inicial, z1_inicial, x1_final, y1_final, z1_final  )
             
-            #///////////////////////////////////////////////////////////////////////////////////////
+
+                
+
+                ponto111 = [X, Y, Z ]
+                ponto222= [X1, Y1, Z1]
+                ponto333 = [X2, Y2, Z2]
+                ponto4 = [X3, Y3, Z3]
+    
+                x_inicial, y_inicial, z_inicial = ponto222
+                x_final, y_final, z_final = ponto111
+                x1_inicial, y1_inicial, z1_inicial = ponto4
+                x1_final, y1_final, z1_final = ponto333
 
 
-            new_row = ["flexao cabeca:", flexao_cabeca, "flexao tronco:", flexao_tronco, "rotacao tronco:", rotacao_tronco]
+                rotacao_tronco = angulo_de_flexao(x_inicial, y_inicial, z_inicial, x_final, y_final, z_final, x1_inicial, y1_inicial, z1_inicial, x1_final, y1_final, z1_final  )
+                
+                #///////////////////////////////////////////////////////////////////////////////////////
+                # "flexao cabeca:", flexao_cabeca, "flexao tronco:", flexao_tronco, 
 
-            writer.writerow(new_row)
+                new_row = ["rotacao tronco:", rotacao_tronco]
+
+                writer.writerow(new_row)
 
 
 
-        count += 1
+            count += 1

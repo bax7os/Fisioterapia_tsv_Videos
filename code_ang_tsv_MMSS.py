@@ -74,7 +74,7 @@ diretorio = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/input/MMSS'
 arquivos_tsv = glob.glob(f'{diretorio}/*.tsv')
 
 # Abra o arquivo de saída uma vez fora do loop
-output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/MMSS/output_angulos_videos.tsv'
+output_angle = 'D:/Faculdade/PET/Fisioterapia/Fisioterapia_tsv_Videos/angulos/MMSS/output_angulos_videos_RT.tsv'
 with open(output_angle, 'a', newline='') as tsv_out:
     writer = csv.writer(tsv_out, delimiter='\t')
     
